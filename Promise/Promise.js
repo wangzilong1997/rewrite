@@ -16,7 +16,7 @@ function Promise(executor){
     function reject(data){
         //判断状态 
         if (self.PromiseState !== 'pending') return
-        
+
         self.PromiseState = 'reject'
         self.PromiseResult = data
     }
@@ -27,5 +27,17 @@ function Promise(executor){
     }catch(e){
         // throw e
         reject(e)
+    }
+    Promise.prototype.then = function(onResolved,onRejected){
+        //调用回调函数
+        //并且传递参数
+        if(this.PromiseState === 'fulfilled'){
+            onResolved(this.PromiseResult)
+        }
+    
+        if(this.PromiseState === 'reject'){
+            onRejected(this.PromiseResult)
+        }
+    
     }
 }

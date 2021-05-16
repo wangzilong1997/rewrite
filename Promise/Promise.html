@@ -14,6 +14,11 @@
             // resolve('okkkkk')
             throw 'myerror'
         })
+        p.then(resolve =>{
+            console.log('resolve执行',resolve)
+        },reject =>{
+            console.log('reject执行',reject)
+        })
         console.log(p)
     </script>
 </body>
