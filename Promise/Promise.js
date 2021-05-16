@@ -5,12 +5,18 @@ function Promise(executor){
     let self = this
 
     function resolve(data){
+        //判断状态 
+        if (self.PromiseState !== 'pending') return
+
         self.PromiseState = 'fulfilled'
         self.PromiseResult = data
 
     }
 
     function reject(data){
+        //判断状态 
+        if (self.PromiseState !== 'pending') return
+        
         self.PromiseState = 'reject'
         self.PromiseResult = data
     }
