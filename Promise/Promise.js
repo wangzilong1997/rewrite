@@ -14,6 +14,12 @@ function Promise(executor){
         self.PromiseState = 'reject'
         self.PromiseResult = data
     }
-    //同步调用【执行器函数】
-    executor(resolve,reject)
+
+    try{
+        //同步调用【执行器函数】
+        executor(resolve,reject)
+    }catch(e){
+        // throw e
+        reject(e)
+    }
 }
