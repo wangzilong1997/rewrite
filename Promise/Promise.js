@@ -116,4 +116,18 @@ function Promise(executor){
     Promise.prototype.catch = function(onRejected){
         return this.then(undefined,onRejected)
     }
+    //添加resolve方法
+    Promise.resolve = function(value){
+        return new Promise((resolve,reject)=>{
+            if(value instanceof Promise){
+                value.then(v=>{
+                    resolve(v)
+                },r=>{
+                    reject(r)
+                })
+            }else{
+                resolve(value)
+            }
+        })
+    }
 }
