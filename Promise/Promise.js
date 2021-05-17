@@ -45,6 +45,8 @@ function Promise(executor){
     }
     Promise.prototype.then = function(onResolved,onRejected){
 
+        let self = this
+
         return new Promise((resolve,reject)=>{
            
             //调用回调函数
@@ -80,8 +82,41 @@ function Promise(executor){
             //保存回调函数
 
             this.callback.push({
-                onResolved:onResolved,
-                onRejected:onRejected
+                onResolved:function(){
+                    try{
+                        let result = onResolved(self.PromiseResult)
+                        if(result instanceof Promise){
+                            result.then(v=>{
+                                resolve(v)
+                            },r=>{
+                                reject(r)
+                            })
+                        }else{
+                            resolve(result)
+                        }
+                    }catch(e){
+                        reject(e)
+                    }
+                    
+                },
+                onRejected:function(){
+
+                    try{
+                        let result = onRejected(self.PromiseResult)
+                        if(result instanceof Promise){
+                            result.then(v=>{
+                                resolve(v)
+                            },r=>{
+                                reject(r)
+                            })
+                        }else{
+                            resolve(result)
+                        }
+                    }catch(e){
+                        reject(e)
+                    }
+                    
+                }
             })
 
             }
