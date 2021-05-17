@@ -112,4 +112,8 @@ function Promise(executor){
         
     
     }
+
+    Promise.prototype.catch = function(onRejected){
+        return this.then(undefined,onRejected)
+    }
 }
