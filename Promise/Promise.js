@@ -130,4 +130,11 @@ function Promise(executor){
             }
         })
     }
+
+    //添加reject方法
+    Promise.reject = function(reason){
+        return new Promise(resolve,reject=>{
+            reject(reason)
+        })
+    }
 }
