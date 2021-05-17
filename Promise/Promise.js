@@ -47,6 +47,17 @@ function Promise(executor){
 
         let self = this
 
+        if(typeof onRejected !== 'function'){
+            onRejected = reason =>{
+                throw reason;
+            }
+        }
+        if(typeof onResolved !== 'function'){
+            onResolved = value =>{
+                throw value;
+            }
+        }
+
         return new Promise((resolve,reject)=>{
             //封装函数callback
             function callback(type){
