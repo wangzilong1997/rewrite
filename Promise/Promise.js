@@ -44,26 +44,49 @@ function Promise(executor){
         reject(e)
     }
     Promise.prototype.then = function(onResolved,onRejected){
-        //调用回调函数
-        //并且传递参数
-        if(this.PromiseState === 'fulfilled'){
-            onResolved(this.PromiseResult)
-        }
-    
-        if(this.PromiseState === 'reject'){
-            onRejected(this.PromiseResult)
-        }
 
-        //判断pending状态
-    if(this.PromiseState === 'pending'){
-        //保存回调函数
+        return new Promise((resolve,reject)=>{
+           
+            //调用回调函数
+            //并且传递参数
+            if(this.PromiseState === 'fulfilled'){
+                try{
+                    let result = onResolved(this.PromiseResult)
 
-        this.callback.push({
-            onResolved:onResolved,
-            onRejected:onRejected
+                    if(result instanceof Promise){
+                        //如果是Promise对象
+                        result.then(v =>{
+                            resolve(v)
+                        },r=>{
+                            reject(r)
+                        })
+                    }else{
+                        //当前结果变为成功
+                        resolve(result)
+                    }
+                }catch(e){
+                    reject(e)
+                }
+                
+                
+            }
+        
+            if(this.PromiseState === 'reject'){
+                onRejected(this.PromiseResult)
+            }
+
+            //判断pending状态
+            if(this.PromiseState === 'pending'){
+            //保存回调函数
+
+            this.callback.push({
+                onResolved:onResolved,
+                onRejected:onRejected
+            })
+
+            }
         })
-
-    }
+        
     
     }
 }

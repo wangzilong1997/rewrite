@@ -14,20 +14,22 @@
             // resolve('okkkkk')
             setTimeout(()=>{
                 console.log('setTimeoutrej 开始执行 this:',this)
-                reject('not okk!') 
+                resolve('is okk!') 
             },5000)
             
         })
-        p.then(resolve =>{
+        const result = p.then(resolve =>{
             console.log('resolve执行',resolve)
+            throw 'error'
         },reject =>{
             console.log('reject执行',reject)
         })
-        p.then(resolve=>{
+        console.log('result',result)
+        /* p.then(resolve=>{
             console.log('resolve执行2',resolve)
         },reject =>{
             console.log('reject执行2',reject)
-        })
+        }) */
         console.log(p)
     </script>
 </body>
