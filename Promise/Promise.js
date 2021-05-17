@@ -48,12 +48,10 @@ function Promise(executor){
         let self = this
 
         return new Promise((resolve,reject)=>{
-           
-            //调用回调函数
-            //并且传递参数
-            if(this.PromiseState === 'fulfilled'){
+            //封装函数callback
+            function callback(type){
                 try{
-                    let result = onResolved(this.PromiseResult)
+                    let result = type(self.PromiseResult)
 
                     if(result instanceof Promise){
                         //如果是Promise对象
@@ -69,12 +67,18 @@ function Promise(executor){
                 }catch(e){
                     reject(e)
                 }
+            }
+           
+            //调用回调函数
+            //并且传递参数
+            if(this.PromiseState === 'fulfilled'){
+               callback(onResolved)
                 
                 
             }
         
             if(this.PromiseState === 'reject'){
-                onRejected(this.PromiseResult)
+                callback(onRejected)
             }
 
             //判断pending状态
@@ -83,39 +87,12 @@ function Promise(executor){
 
             this.callback.push({
                 onResolved:function(){
-                    try{
-                        let result = onResolved(self.PromiseResult)
-                        if(result instanceof Promise){
-                            result.then(v=>{
-                                resolve(v)
-                            },r=>{
-                                reject(r)
-                            })
-                        }else{
-                            resolve(result)
-                        }
-                    }catch(e){
-                        reject(e)
-                    }
+                    callback(onResolved)
                     
                 },
                 onRejected:function(){
 
-                    try{
-                        let result = onRejected(self.PromiseResult)
-                        if(result instanceof Promise){
-                            result.then(v=>{
-                                resolve(v)
-                            },r=>{
-                                reject(r)
-                            })
-                        }else{
-                            resolve(result)
-                        }
-                    }catch(e){
-                        reject(e)
-                    }
-                    
+                    callback(onRejected)                    
                 }
             })
 
