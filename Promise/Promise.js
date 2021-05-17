@@ -5,7 +5,7 @@ function Promise(executor){
     let self = this
 
     //声明回调函数
-    this.callback = {}
+    this.callback = []
 
     function resolve(data){
         //判断状态 
@@ -15,9 +15,10 @@ function Promise(executor){
         self.PromiseResult = data
 
         //调用成功的回调函数
-        if(self.callback.onResolved){
-            self.callback.onResolved(data)
-        }
+        
+        self.callback.forEach((item)=>{
+            item.onResolved(data)
+        })
 
     }
 
@@ -30,9 +31,9 @@ function Promise(executor){
 
        
         //调用失败时候的回调
-        if(self.callback.onRejected){
-            self.callback.onRejected(data)
-        }
+        self.callback.forEach((item)=>{
+            item.onRejected(data)
+        })
     }
 
     try{
@@ -57,10 +58,10 @@ function Promise(executor){
     if(this.PromiseState === 'pending'){
         //保存回调函数
 
-        this.callback = {
+        this.callback.push({
             onResolved:onResolved,
             onRejected:onRejected
-        }
+        })
 
     }
     

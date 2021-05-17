@@ -23,6 +23,11 @@
         },reject =>{
             console.log('reject执行',reject)
         })
+        p.then(resolve=>{
+            console.log('resolve执行2',resolve)
+        },reject =>{
+            console.log('reject执行2',reject)
+        })
         console.log(p)
     </script>
 </body>
